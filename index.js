@@ -13,11 +13,15 @@ const port = process.env.PORT || 3000;
 // Create a bot instance
 const bot = new TelegramBot(token);
 
-bot.setWebHook(`${url}/webhook/${token}`);
+// Set the webhook
+bot.setWebHook(`${url}/webhook/${token}`)
+    .then(() => console.log('Webhook set successfully'))
+    .catch(err => console.error('Error setting webhook:', err));
 
+// Webhook handler
 app.post(`/webhook/${token}`, (req, res) => {
     const { message } = req.body;
-    
+
     if (!message) {
         return res.sendStatus(200);
     }
@@ -26,13 +30,14 @@ app.post(`/webhook/${token}`, (req, res) => {
     res.sendStatus(200);
 });
 
+// Handle incoming messages
 async function handleMessage(message) {
     const chatId = message.chat.id;
     const text = message.text;
 
     // Command handler
     if (text.startsWith('/')) {
-        switch(text) {
+        switch (text) {
             case '/start':
                 await bot.sendMessage(chatId, 'Welcome! Bot is up and running.');
                 break;
@@ -53,10 +58,12 @@ async function handleMessage(message) {
     }
 }
 
+// Health check endpoint
 app.get('/health', (req, res) => {
     res.status(200).json({ status: 'OK' });
 });
 
+// Start the server
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
