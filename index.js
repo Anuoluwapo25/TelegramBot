@@ -39,13 +39,15 @@ async function handleMessage(message) {
     if (text.startsWith('/')) {
         switch (text) {
             case '/start':
-                await bot.sendMessage(chatId, 'Welcome! Click the button below to open Breevs.', {
+                await bot.sendMessage(chatId, 'Welcome! Click the button below to open the app.', {
                     reply_markup: {
                         inline_keyboard: [
                             [
                                 {
                                     text: 'Open Breevs',
-                                    url: 'https://russian-roullette-4taj.vercel.app/'
+                                    web_app: {
+                                        url: 'https://russian-roullette-4taj.vercel.app/'
+                                    }
                                 }
                             ]
                         ]
